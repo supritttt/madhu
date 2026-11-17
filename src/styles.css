@@ -47,6 +47,25 @@ img { display: block; max-width: 100%; }
 }
 .online { display: inline-flex; align-items: center; gap: 7px; }
 .online i { width: 7px; height: 7px; border-radius: 50%; background: #a9f1ba; box-shadow: 0 0 8px #a9f1ba; }
+.top-strip-secret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  opacity: 0.2;
+  color: #ffd8f0;
+  background: transparent;
+  font-size: 9px;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+.top-strip-secret:hover, .top-strip-secret:focus-visible {
+  opacity: 1;
+  transform: scale(1.15);
+}
 
 .site-header {
   display: flex;

@@ -73,6 +73,7 @@ function App() {
   const [musicError, setMusicError] = useState('');
   const [letterOpen, setLetterOpen] = useState(false);
   const [letterUnlocked, setLetterUnlocked] = useState(false);
+  const [hiddenLetterOpen, setHiddenLetterOpen] = useState(false);
   const [nameGuess, setNameGuess] = useState('');
   const [nameError, setNameError] = useState('');
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -85,6 +86,7 @@ function App() {
   const [galleryRevealed, setGalleryRevealed] = useState(false);
   const [mascotHappy, setMascotHappy] = useState(false);
   const letterDialog = useRef(null);
+  const hiddenLetterDialog = useRef(null);
   const photoDialog = useRef(null);
   const audioRef = useRef(null);
   const mascotRef = useRef(null);
@@ -102,6 +104,7 @@ function App() {
   const mascotTapCount = useRef(0);
   const titleClicks = useRef(0);
   const wordmarkClicks = useRef(0);
+  const hiddenLetterClicks = useRef(0);
   const easterEggTimer = useRef(null);
   const keySequence = useRef([]);
   const typedSequence = useRef('');
@@ -202,6 +205,14 @@ function App() {
       letterDialog.current.close();
     }
   }, [letterOpen]);
+
+  useEffect(() => {
+    if (hiddenLetterOpen && !hiddenLetterDialog.current?.open) {
+      hiddenLetterDialog.current?.showModal();
+    } else if (!hiddenLetterOpen && hiddenLetterDialog.current?.open) {
+      hiddenLetterDialog.current.close();
+    }
+  }, [hiddenLetterOpen]);
 
   useEffect(() => {
     if (selectedPhoto !== null && !photoDialog.current?.open) {
@@ -330,6 +341,21 @@ function App() {
     setLetterOpen(false);
   };
 
+  const openHiddenLetter = () => {
+    hiddenLetterClicks.current += 1;
+
+    if (hiddenLetterClicks.current >= 7) {
+      hiddenLetterClicks.current = 0;
+      setHiddenLetterOpen(true);
+      showEasterEgg('You found the tiny hidden letter tucked behind the sparkle. ✨');
+      return;
+    }
+
+    if (hiddenLetterClicks.current >= 3) {
+      showEasterEgg('There is a secret sparkle hiding in plain sight. Keep looking. ✦');
+    }
+  };
+
   const checkName = (event) => {
     event.preventDefault();
     if (secretNames.has(nameGuess.trim().toLowerCase())) {
@@ -347,7 +373,7 @@ function App() {
     <div className={partyMode ? 'site party-mode' : 'site'} id="top">
       <div className="top-strip" aria-label="Site status">
         <span>✿ MADHU'S LITTLE CORNER OF THE INTERNET ✿</span>
-        <span className="online"><i /> ONLINE & THINKING OF YOU</span>
+        <span className="online"><i /> ONLINE & THINKING OF YOU<button type="button" className="top-strip-secret" onClick={openHiddenLetter} aria-label="A tiny hidden sparkle">✦</button></span>
       </div>
 
       <header className="site-header">
@@ -667,6 +693,24 @@ function App() {
             <button className="button button-dark" type="button" onClick={closeLetter}>keep this feeling <span>✧</span></button>
           </div>
         )}
+      </dialog>
+
+      <dialog
+        className="letter-dialog secret-letter-dialog"
+        ref={hiddenLetterDialog}
+        onClose={() => setHiddenLetterOpen(false)}
+        onClick={(event) => { if (event.target === hiddenLetterDialog.current) setHiddenLetterOpen(false); }}
+        aria-labelledby="hidden-letter-heading"
+      >
+        <button className="dialog-close" type="button" onClick={() => setHiddenLetterOpen(false)} aria-label="Close the hidden letter">×</button>
+        <div className="letter-content letter-revealed">
+          <span className="letter-icon" aria-hidden="true">✦</span>
+          <p className="eyebrow">A TINY SECRET, KEPT FOR LATER</p>
+          <h2 id="hidden-letter-heading">For the girl who makes everything softer.</h2>
+          <p className="letter-body">Some little treasures are not meant to be obvious. They are hidden in the quiet corners, waiting for the right person to notice them. And you, Madhu, are exactly the kind of person who deserves to find them. You are kind, bright, and so much more lovely than you know. Keep being the warm, beautiful light that you are.</p>
+          <p className="letter-signoff">With a tiny little sparkle and a whole lot of love,<br /><strong>the secret keeper ♡</strong></p>
+          <button className="button button-dark" type="button" onClick={() => setHiddenLetterOpen(false)}>keep this sparkle <span>✧</span></button>
+        </div>
       </dialog>
 
       <dialog
