@@ -239,7 +239,10 @@ function App() {
 
   useEffect(() => {
     if (!galleryRevealed || !galleryRef.current || !deckRef.current) return undefined;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      || window.matchMedia('(max-width: 600px)').matches
+    ) return undefined;
 
     const deckBounds = deckRef.current.getBoundingClientRect();
     const deckX = deckBounds.left + deckBounds.width / 2;
