@@ -296,7 +296,7 @@ function App() {
   return (
     <div className={partyMode ? 'site party-mode' : 'site'} id="top">
       <div className="top-strip" aria-label="Site status">
-        <span>✿ MADHU'S LITTLE CORNER OF THE INTERNET ✿</span>
+        <span>✿ A LITTLE CORNER OF THE INTERNET ✿</span>
         <span className="online"><i /> ONLINE & THINKING OF YOU<button type="button" className="top-strip-secret" onClick={openHiddenLetter} aria-label="A tiny hidden sparkle">✦</button></span>
       </div>
 
